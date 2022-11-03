@@ -95,6 +95,38 @@ $hero .= '<!-- /wp:group -->';
      * Feat Three
      */
 
+    $featThree = '<!-- wp:group {"className":"feat-three"} -->
+<div class="wp-block-group feat-three"><!-- wp:group {"className":"item"} -->
+<div class="wp-block-group item"><!-- wp:heading {"level":3} -->
+<h3>test</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>test</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"item"} -->
+<div class="wp-block-group item"><!-- wp:heading {"level":3} -->
+<h3>test</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>test</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"item"} -->
+<div class="wp-block-group item"><!-- wp:heading {"level":3} -->
+<h3>test</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>test</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group --></div>
+<!-- /wp:group -->';
+
 
     /**
      * Solutions
