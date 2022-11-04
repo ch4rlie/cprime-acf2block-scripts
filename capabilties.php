@@ -18,8 +18,7 @@ foreach ($pages as $page) :
      * Process the hero
      */
 
-    $hero = '<!-- wp:group {"className":"capabilities-hero"} -->
-<div class="wp-block-group capabilities-hero">';
+    $hero = '<!-- wp:group {"className":"capabilities-hero"} --><div class="wp-block-group capabilities-hero">';
     $hero .= '<!-- wp:group {"className":"left"} --><div class="wp-block-group left">';
 
     $hero_product_logo = get_field('hero_product_logo', $thisPageId);
