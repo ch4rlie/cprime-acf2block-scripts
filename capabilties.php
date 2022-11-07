@@ -23,7 +23,7 @@ foreach ($pages as $page) :
 
     $hero_product_logo = get_field('hero_product_logo', $thisPageId);
     if (!empty($hero_product_logo)) :
-    $hero .= '<!-- wp:group {"className":"top-logo"} --><div class="wp-block-group top-logo"><!-- wp:image {"id":'.$hero_product_logo['ID'].',"height":'.$hero_product_logo['sizes']['medium-height'].',width:'.$hero_product_logo['sizes']['medium-width'].',sizeSlug":"medium"} --><figure class="wp-block-image size-medium"><img src="'.$hero_product_logo['sizes']['medium'].'" height="'.$hero_product_logo['sizes']['medium-height'].'" width="'.$hero_product_logo['sizes']['medium-width'].'" alt="'.$hero_product_logo['alt'].'" class="wp-image-'.$hero_product_logo['ID'].'"/></figure><!-- /wp:image --></div><!-- /wp:group -->';
+    $hero .= '<!-- wp:group {"className":"top-logo"} --><div class="wp-block-group top-logo"><!-- wp:image {className":"size-medium"} --><figure class="wp-block-image size-medium"><img src="'.$hero_product_logo['sizes']['medium'].'" alt="'.$hero_product_logo['alt'].'" /></figure><!-- /wp:image --></div><!-- /wp:group -->';
     endif;
 
     $hero_title = get_field('hero_title', $thisPageId);
@@ -43,9 +43,10 @@ foreach ($pages as $page) :
         <!-- /wp:paragraph -->';
     endif;
 
+    $cta_button = get_field('cta_button', $thisPageId);
     $cta_link = '#cta';
     $cta_class = 'scroll-offset';
-    $cta_override = get_field('cta_link_override');
+    $cta_override = get_field('cta_link_override', $thisPageId);
     if (!empty($cta_override)) :
         $cta_link = $cta_override;
         $first_char_link = mb_substr($cta_override, 0, 1, 'utf-8');
@@ -55,34 +56,32 @@ foreach ($pages as $page) :
     endif;
 
     if (!empty($cta_button)) :
-        $hero .= '
-        <!-- wp:buttons -->
+        $hero .= '<!-- wp:buttons -->
         <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-fill"} -->
-        <div class="wp-block-button is-style-fill"><a href="'.$cta_link.'" class="wp-block-button__link '.$cta_class.'" data-offset="110">'.$cta_button.'</a></div>
+        <div class="wp-block-button is-style-fill"><a href="'.$cta_link.'" class="wp-block-button__link '.$cta_class.'">'.$cta_button.'</a></div>
         <!-- /wp:button --></div>
-        <!-- /wp:buttons --></div>
-        ';
+        <!-- /wp:buttons -->';
     endif;
 
 
-$hero .= '<!-- /wp:group --></div>';
-$hero .= '<!-- /wp:group -->';
+$hero .= '</div><!-- /wp:group -->';
+$hero .= '</div><!-- /wp:group -->';
 
 $hero .= '<!-- wp:group {"className":"right"} -->
 <div class="wp-block-group right">';
 
 
-$main_hero_image = get_field('main_hero_image');
+$main_hero_image = get_field('main_hero_image', $thisPageId);
 
 if (!empty($main_hero_image)) :
-$hero .= '<!-- wp:image {"id":73662,"width":'.$hero_product_logo['sizes']['large-width'].',"height":'.$hero_product_logo['sizes']['large-height'].',"sizeSlug":"large"} -->
-<figure class="wp-block-image size-large"><img src="'.$hero_product_logo['sizes']['large'].'" alt="'.$hero_product_logo['alt'].'" class="wp-image-'.$hero_product_logo['ID'].'" height="'.$hero_product_logo['sizes']['large-height'].'" width="'.$hero_product_logo['sizes']['large-width'].'"/></figure>
-<!-- /wp:image --></div>';
+$hero .= '<!-- wp:image {"id":'.$main_hero_image['ID'].',"width":'.$main_hero_image['sizes']['large-width'].',"height":'.$main_hero_image['sizes']['large-height'].',"sizeSlug":"large"} -->
+<figure class="wp-block-image size-large"><img src="'.$main_hero_image['sizes']['large'].'" alt="'.$main_hero_image['alt'].'" class="wp-image-'.$main_hero_image['ID'].'" height="'.$main_hero_image['sizes']['large-height'].'" width="'.$main_hero_image['sizes']['large-width'].'"/></figure>
+<!-- /wp:image -->';
 
 endif;
 
-$hero .= '<!-- /wp:group --></div>';
-$hero .= '<!-- /wp:group -->';
+$hero .= '</div><!-- /wp:group -->';
+$hero .= '</div><!-- /wp:group -->';
 
 
     /**
@@ -121,16 +120,14 @@ $half .= '
 <!-- wp:heading {"level":3} -->
 <h3>'.$intro_title.'</h3>
 <!-- /wp:heading -->
-
 <!-- wp:paragraph -->
-<p>'.$intro_sub_title.'</p>
-<!-- /wp:paragraph --></div>
-
-<!-- /wp:group --></div>';
+'.$intro_sub_title.'
+<!-- /wp:paragraph -->
+</div><!-- /wp:group -->';
 endif;
 
-$half .= '<!-- /wp:group --></div>
-<!-- /wp:group -->';
+$half .= '</div><!-- /wp:group -->
+</div><!-- /wp:group -->';
 
 endif;
 
@@ -145,20 +142,16 @@ endif;
             $title = get_sub_field('title');
             $text = get_sub_field('text');
 
-$featThree .= '<!-- wp:group {"className":"item"} -->
-<div class="wp-block-group item"><!-- wp:heading {"level":3} -->
+$featThree .= '<!-- wp:group {"className":"item"} --><div class="wp-block-group item"><!-- wp:heading {"level":3} -->
 <h3>'.$title.'</h3>
 <!-- /wp:heading -->
-
 <!-- wp:paragraph -->
-<p>'.$text.'</p>
-<!-- /wp:paragraph --></div>
-
-<!-- /wp:group -->';
+'.$text.'
+<!-- /wp:paragraph --></div><!-- /wp:group -->';
 endwhile;
 
 
-$featThree .= '<!-- /wp:group -->';
+$featThree .= '</div><!-- /wp:group -->';
 
     endif;
 
@@ -234,8 +227,8 @@ $featThree .= '<!-- /wp:group -->';
     /**
      * Resources
      */
-
-
+    $resources = '';
+    $resources .= '<!-- wp:acf/resource-picker {"name":"acf/resource-picker","data":{"resources_title":"Insert Resource Title","_resources_title":"field_63658acc3a187","resources_0_resource":56295,"_resources_0_resource":"field_63658c67f6bef","resources_1_resource":56300,"_resources_1_resource":"field_63658c67f6bef","resources_2_resource":39563,"_resources_2_resource":"field_63658c67f6bef","resources":3,"_resources":"field_63658adf3a188"},"mode":"preview"} /-->';
 
     /**
      * CTA
