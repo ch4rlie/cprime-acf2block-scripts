@@ -182,20 +182,22 @@ $featThree .= '<!-- /wp:group -->';
     "solutions_fixed_image":'.$solutions_fixed_image['ID'].',
     "_solutions_fixed_image":"field_6364312192157",';
 
+    $i =0;
     while (have_rows('solutions_items', $thisPageId)): the_row();
         $title = get_sub_field('title');
         $text = get_sub_field('text');
         $link_text = get_sub_field('link_text');
         $link_url = get_sub_field('link_url');
     $solutions .= '
-    "solutions_items_0_title":"'.$title.'",
-    "_solutions_items_0_title":"field_6364318f9215a",
-    "solutions_items_0_text":"'.$text.'",
-    "_solutions_items_0_text":"field_636431ae9215b",
-    "solutions_items_0_link_text":"'.$link_text.'",
-    "_solutions_items_0_link_text":"field_636431c79215c",
-    "solutions_items_0_link_url":"'.$link_url.'",
-    "_solutions_items_0_link_url":"field_636431d79215d",';
+    "solutions_items_'.$i.'_title":"'.$title.'",
+    "_solutions_items_'.$i.'_title":"field_6364318f9215a",
+    "solutions_items_'.$i.'_text":"'.$text.'",
+    "_solutions_items_'.$i.'_text":"field_636431ae9215b",
+    "solutions_items_'.$i.'_link_text":"'.$link_text.'",
+    "_solutions_items_'.$i.'_link_text":"field_636431c79215c",
+    "solutions_items_'.$i.'_link_url":"'.$link_url.'",
+    "_solutions_items_'.$i.'_link_url":"field_636431d79215d",';
+    $i++;
     endwhile;
 
     $solutions .=
@@ -213,13 +215,16 @@ $featThree .= '<!-- /wp:group -->';
 
         $quickFacts .= '<!-- wp:acf/quick-facts {"name":"acf/quick-facts","data":{"quick_facts_title":"'.$quick_facts_title.'","_quick_facts_title":"field_63648aa5720eb","quick_facts_desc":"'.$quick_facts_desc.'","_quick_facts_desc":"field_63648adc720ec",';
 
-
+        $i = 0;
         while (have_rows('quick_facts_items', $thisPageId)) : the_row();
             $text = get_sub_field('text');
             $image = get_sub_field('image');
             $link = get_sub_field('link');
 
-            $quickFacts .= '"quick_facts_items_0_image":'.$image['ID'].',"_quick_facts_items_0_image":"field_63648afe720ee","quick_facts_items_0_text":"'.$text.'","_quick_facts_items_0_text":"field_63648b16720ef","quick_facts_items_0_link":"'.$link.'","_quick_facts_items_0_link":"field_63648b29720f0",';
+            if (is_array($image)) $quickFacts .= '"quick_facts_items_'.$i.'_image":'.$image['ID'].',';
+            $quickFacts .= '"_quick_facts_items_'.$i.'_image":"field_63648afe720ee","quick_facts_items_'.$i.'_text":"'.$text.'","_quick_facts_items_'.$i.'_text":"field_63648b16720ef","quick_facts_items_'.$i.'_link":"'.$link.'","_quick_facts_items_'.$i.'_link":"field_63648b29720f0",';
+
+            $i++;
         endwhile;
 
         $quickFacts .= '"quick_facts_items":'.count(get_field('quick_facts_items', $thisPageId)).',"_quick_facts_items":"field_63648ae5720ed"},"mode":"edit"} /-->';
