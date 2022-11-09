@@ -3,6 +3,7 @@ set_time_limit(500);
 require_once('wp-load.php');
 define('WP_USE_THEMES', false);
 
+
 $args = array(
     'meta_key' => '_wp_page_template',
     'meta_value' => 'template_capabilities.php',
@@ -86,6 +87,7 @@ $hero .= '</div><!-- /wp:group -->';
 
     /**
      * Feat Two
+     *
      */
     $intro_image = get_field('intro_image', $thisPageId);
     $intro_video = get_field('intro_video', $thisPageId);
@@ -108,10 +110,10 @@ https://www.youtube.com/watch?v='.$intro_video.'
     elseif ($intro_image) :
         $half .= '<!-- wp:image {"id":'.$intro_image['ID'].',"sizeSlug":"large"} -->
     <figure class="wp-block-image size-large"><img src="'.$intro_image['sizes']['large'].'" alt="'.$intro_image['alt'].'"/></figure>
-    <!-- /wp:image --></div>';
+    <!-- /wp:image -->';
     endif;
 
-$half .= '<!-- /wp:group -->';
+$half .= '</div><!-- /wp:group -->';
 
 if ($intro_title || $intro_sub_title) :
 $half .= '
@@ -142,13 +144,13 @@ endif;
             $title = get_sub_field('title');
             $text = get_sub_field('text');
 
-$featThree .= '<!-- wp:group {"className":"item"} --><div class="wp-block-group item"><!-- wp:heading {"level":3} -->
-<h3>'.$title.'</h3>
-<!-- /wp:heading -->
-<!-- wp:paragraph -->
-'.$text.'
-<!-- /wp:paragraph --></div><!-- /wp:group -->';
-endwhile;
+            $featThree .= '<!-- wp:group {"className":"item"} --><div class="wp-block-group item"><!-- wp:heading {"level":3} -->
+            <h3>'.$title.'</h3>
+            <!-- /wp:heading -->
+            <!-- wp:paragraph -->
+            '.$text.'
+            <!-- /wp:paragraph --></div><!-- /wp:group -->';
+        endwhile;
 
 
 $featThree .= '</div><!-- /wp:group -->';
@@ -164,37 +166,33 @@ $featThree .= '</div><!-- /wp:group -->';
     $solutions_sub_title = get_field('solutions_sub_title', $thisPageId);
     $solutions_fixed_image = get_field('solutions_fixed_image', $thisPageId);
 
-    if (have_rows('solutions_items')) :
-    $solutions = '<!-- wp:acf/solutions-content {
-    "name":"acf/solutions-content",
-    "data":{
-    "solutions_title":"'.$solutions_title.'",
-    "_solutions_title":"field_6364303f92155",
-    "solutions_sub_title":"'.$solutions_sub_title.'",
-    "_solutions_sub_title":"field_636430f192156",
-    "solutions_fixed_image":'.$solutions_fixed_image['ID'].',
-    "_solutions_fixed_image":"field_6364312192157",';
+    if (have_rows('solutions_items', $thisPageId)) :
+    $solutions = '<!-- wp:acf/cprime-default-block {"name":"acf/cprime-default-block","data":{"background_color":"beige","_background_color":"field_636beb1228350","background_image":"","_background_image":"field_636bebb928352","container":"full-width","_container":"field_636beb7d28351"},"mode":"edit"} -->';
 
-    $i =0;
+    $solutions .= '<!-- wp:acf/solutions-content {"name":"acf/solutions-content","data":{"solutions_fixed_image":'.$solutions_fixed_image['ID'].',"_solutions_fixed_image":"field_6364312192157"},"mode":"edit"} -->';
+    $i=0;
     while (have_rows('solutions_items', $thisPageId)): the_row();
         $title = get_sub_field('title');
         $text = get_sub_field('text');
         $link_text = get_sub_field('link_text');
         $link_url = get_sub_field('link_url');
-    $solutions .= '
-    "solutions_items_'.$i.'_title":"'.$title.'",
-    "_solutions_items_'.$i.'_title":"field_6364318f9215a",
-    "solutions_items_'.$i.'_text":"'.$text.'",
-    "_solutions_items_'.$i.'_text":"field_636431ae9215b",
-    "solutions_items_'.$i.'_link_text":"'.$link_text.'",
-    "_solutions_items_'.$i.'_link_text":"field_636431c79215c",
-    "solutions_items_'.$i.'_link_url":"'.$link_url.'",
-    "_solutions_items_'.$i.'_link_url":"field_636431d79215d",';
-    $i++;
+
+        $solutions .= '<!-- wp:heading {"level":3} -->
+<h3>'.$title.'</h3>
+<!-- /wp:heading -->';
+
+        $solutions .= '<!-- wp:paragraph -->
+<p>'.$text.'</p>
+<!-- /wp:paragraph --';
+
+        if ($link_url && $link_text) $solutions = '<!-- wp:paragraph -->
+<p><a target="_blank" href="'.$link_url.'">'.$link_text.'</a></p>
+<!-- /wp:paragraph -->';
+        $i++;
     endwhile;
 
-    $solutions .=
-        '"solutions_items":'.count(get_field('solutions_items', $thisPageId)).',"_solutions_items":"field_6364314092159"},"mode":"edit"} /-->';
+    $solutions .=  '<!-- /wp:acf/solutions-content -->
+<!-- /wp:acf/cprime-default-block -->';
 
     endif;
 
@@ -206,7 +204,7 @@ $featThree .= '</div><!-- /wp:group -->';
         $quick_facts_title = get_field('quick_facts_title', $thisPageId);
         $quick_facts_desc = get_field('quick_facts_desc', $thisPageId);
 
-        $quickFacts .= '<!-- wp:acf/quick-facts {"name":"acf/quick-facts","data":{"quick_facts_title":"'.$quick_facts_title.'","_quick_facts_title":"field_63648aa5720eb","quick_facts_desc":"'.$quick_facts_desc.'","_quick_facts_desc":"field_63648adc720ec",';
+        $quickFacts .= '<!-- wp:acf/quick-facts {"name":"acf/quick-facts","data":{';
 
         $i = 0;
         while (have_rows('quick_facts_items', $thisPageId)) : the_row();
@@ -220,7 +218,10 @@ $featThree .= '</div><!-- /wp:group -->';
             $i++;
         endwhile;
 
-        $quickFacts .= '"quick_facts_items":'.count(get_field('quick_facts_items', $thisPageId)).',"_quick_facts_items":"field_63648ae5720ed"},"mode":"edit"} /-->';
+        $quickFacts .= '"quick_facts_items":'.count(get_field('quick_facts_items', $thisPageId)).',"_quick_facts_items":"field_63648ae5720ed"},"mode":"edit"} -->';
+        if ($quick_facts_title) $quickFacts .= '<!-- wp:heading --><h2>'.$quick_facts_title.'</h2><!-- /wp:heading -->';
+        if ($quick_facts_desc) $quickFacts .= '<!-- wp:paragraph --><p>'.$quick_facts_desc.'</p><!-- /wp:paragraph -->';
+        $quickFacts .= '<!-- /wp:acf/quick-facts -->';
     endif;
 
 
@@ -241,7 +242,7 @@ $featThree .= '</div><!-- /wp:group -->';
     $cta = '<!-- wp:acf/contact-form-full-width {"name":"acf/contact-form-full-width","data":{"cta_title":"'.$cta_title.'","_cta_title":"field_636499cef8c40","marketo_form_id":"'.$mkto_form_id.'","_marketo_form_id":"field_636499ebf8c41"},"mode":"edit"} /-->';
 
 
-    $content = $hero.$half.$featThree.$solutions.$quickFacts.$cta;
+    $content = $hero.$half.$featThree.$solutions.$quickFacts.$resources.$cta;
     /**
      * Replace all content with the previous content from above
      */
@@ -254,7 +255,7 @@ $featThree .= '</div><!-- /wp:group -->';
     /**
      * Check the box to use Gutenberg
      */
-    update_field('use_gutenberg', ['true'], [$thisPageId]);
+    //update_field('use_gutenberg', ['true'], [$thisPageId]);
 
     echo htmlentities($update_post);
     echo '<br>';
