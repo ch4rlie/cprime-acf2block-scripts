@@ -58,8 +58,8 @@ foreach ($pages as $page) :
 
     if (!empty($cta_button)) :
         $hero .= '<!-- wp:buttons -->
-        <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-fill"} -->
-        <div class="wp-block-button is-style-fill"><a href="'.$cta_link.'" class="wp-block-button__link '.$cta_class.'">'.$cta_button.'</a></div>
+        <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-fill '.$cta_class.'"} -->
+        <div class="wp-block-button is-style-fill '.$cta_class.'"><a href="'.$cta_link.'" class="wp-block-button__link">'.$cta_button.'</a></div>
         <!-- /wp:button --></div>
         <!-- /wp:buttons -->';
     endif;
@@ -78,7 +78,6 @@ if (!empty($main_hero_image)) :
 $hero .= '<!-- wp:image {"id":'.$main_hero_image['ID'].',"width":'.$main_hero_image['sizes']['large-width'].',"height":'.$main_hero_image['sizes']['large-height'].',"sizeSlug":"large"} -->
 <figure class="wp-block-image size-large"><img src="'.$main_hero_image['sizes']['large'].'" alt="'.$main_hero_image['alt'].'" class="wp-image-'.$main_hero_image['ID'].'" height="'.$main_hero_image['sizes']['large-height'].'" width="'.$main_hero_image['sizes']['large-width'].'"/></figure>
 <!-- /wp:image -->';
-
 endif;
 
 $hero .= '</div><!-- /wp:group -->';
@@ -228,8 +227,32 @@ $featThree .= '</div><!-- /wp:group -->';
     /**
      * Resources
      */
-    $resources = '';
-    $resources .= '<!-- wp:acf/resource-picker {"name":"acf/resource-picker","data":{"resources_title":"Insert Resource Title","_resources_title":"field_63658acc3a187","resources_0_resource":56295,"_resources_0_resource":"field_63658c67f6bef","resources_1_resource":56300,"_resources_1_resource":"field_63658c67f6bef","resources_2_resource":39563,"_resources_2_resource":"field_63658c67f6bef","resources":3,"_resources":"field_63658adf3a188"},"mode":"preview"} /-->';
+    $resources_title = get_field('resources_title', $thisPageId);
+    $ft_r_id = get_field('featured_resource', $thisPageId);
+    $i=0;
+
+    $resources = '<!-- wp:acf/resource-picker {"name":"acf/resource-picker","data":{';
+
+    if ($ft_r_id) :
+        $resources .= '"resources_0_resource":'.$ft_r_id.',"_resources_0_resource":"field_63658c67f6bef",';
+        $i++;
+    endif;
+
+    if (have_rows('three_resources', $thisPageId)) : while (have_rows('three_resources', $thisPageId)) : the_row();
+        $resource = get_sub_field('resource');
+        if ($resource) :
+            $resources .= '"resources_'.$i.'_resource":'.$resource.',"_resources_'.$i.'_resource":"field_63658c67f6bef",';
+            $i++;
+        endif;
+        endwhile;
+    endif;
+    
+    $resources .= '"resources":'.$i.',"_resources":"field_63658adf3a188"},"mode":"preview"} -->';
+    if ($resources_title) : $resources .= '<!-- wp:heading {"level":2} -->
+        <h2>'.$resources_title.'</h2>
+        <!-- /wp:heading -->';
+    endif;
+    $resources .= '<!-- /wp:acf/resource-picker -->';
 
     /**
      * CTA
@@ -239,7 +262,13 @@ $featThree .= '</div><!-- /wp:group -->';
         $mkto_form_id = 4431;
     endif;
     $cta_title = get_field('cta_title', $thisPageId);
-    $cta = '<!-- wp:acf/contact-form-full-width {"name":"acf/contact-form-full-width","data":{"cta_title":"'.$cta_title.'","_cta_title":"field_636499cef8c40","marketo_form_id":"'.$mkto_form_id.'","_marketo_form_id":"field_636499ebf8c41"},"mode":"edit"} /-->';
+    $cta = '<!-- wp:acf/contact-form-full-width {"name":"acf/contact-form-full-width","data":{"marketo_form_id":"'.$mkto_form_id.'","_marketo_form_id":"field_636499ebf8c41"},"mode":"preview"} -->';
+    if ($cta_title) :
+        $cta .= '<!-- wp:heading -->
+        <h2>'.$cta_title.'</h2>
+        <!-- /wp:heading -->';
+    endif;
+    $cta .= '<!-- /wp:acf/contact-form-full-width -->';
 
 
     $content = $hero.$half.$featThree.$solutions.$quickFacts.$resources.$cta;
@@ -254,17 +283,22 @@ $featThree .= '</div><!-- /wp:group -->';
 
     /**
      * Check the box to use Gutenberg
+     * TODO: Change that field to a true/false field instead
      */
     //update_field('use_gutenberg', ['true'], [$thisPageId]);
-
-    echo htmlentities($update_post);
-    echo '<br>';
 
     if (is_wp_error($update_post)) {
         $errors = $update_post->get_error_messages();
         foreach ($errors as $error) {
-            echo $error;
+            echo "ERROR ON $thisPageId";
+            //echo $error;
         }
+    }
+    else {
+        echo "Success on $thisPageId";
+        /**
+         * TODO: Delete all data for these acf fields on the page to clear out wp_postmeta
+         */
     }
 
 endforeach;
