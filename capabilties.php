@@ -169,9 +169,9 @@ $featThree .= '</div><!-- /wp:group -->';
     $solutions_fixed_image = get_field('solutions_fixed_image', $thisPageId);
 
     if (have_rows('solutions_items', $thisPageId)) :
-    $solutions = '<!-- wp:acf/cprime-default-block {"name":"acf/cprime-default-block","data":{"background_color":"beige","_background_color":"field_636beb1228350","background_image":"","_background_image":"field_636bebb928352","container":"full-width","_container":"field_636beb7d28351"},"mode":"edit"} -->';
+    $solutions = '<!-- wp:acf/cprime-default-block {"name":"acf/cprime-default-block","data":{"background_color":"beige","_background_color":"field_636beb1228350","background_image":"","_background_image":"field_636bebb928352","container":"full-width","_container":"field_636beb7d28351"},"mode":"preview"} -->';
 
-    $solutions .= '<!-- wp:acf/solutions-content {"name":"acf/solutions-content","data":{"solutions_fixed_image":'.$solutions_fixed_image['ID'].',"_solutions_fixed_image":"field_6364312192157"},"mode":"edit"} -->';
+    $solutions .= '<!-- wp:acf/solutions-content {"name":"acf/solutions-content","data":{"solutions_fixed_image":'.$solutions_fixed_image['ID'].',"_solutions_fixed_image":"field_6364312192157"},"mode":"preview"} -->';
     $i=0;
     while (have_rows('solutions_items', $thisPageId)): the_row();
         $title = get_sub_field('title');
@@ -179,17 +179,12 @@ $featThree .= '</div><!-- /wp:group -->';
         $link_text = get_sub_field('link_text');
         $link_url = get_sub_field('link_url');
 
-        $solutions .= '<!-- wp:heading {"level":3} -->
-<h3>'.$title.'</h3>
-<!-- /wp:heading -->';
+        if ($title) : $solutions .= '<!-- wp:heading {"level":3} --><h3>'.$title.'</h3><!-- /wp:heading -->'; endif;
 
-        $solutions .= '<!-- wp:paragraph -->
-<p>'.$text.'</p>
-<!-- /wp:paragraph --';
+        if ($text) :  $solutions .= '<!-- wp:paragraph -->'.$text.'<!-- /wp:paragraph -->'; endif;
 
-        if ($link_url && $link_text) $solutions = '<!-- wp:paragraph -->
-<p><a target="_blank" href="'.$link_url.'">'.$link_text.'</a></p>
-<!-- /wp:paragraph -->';
+        if ($link_url && $link_text) : $solutions .= '<!-- wp:paragraph --><p><a target="_blank" href="'.$link_url.'">'.$link_text.'</a></p><!-- /wp:paragraph -->'; endif;
+
         $i++;
     endwhile;
 
