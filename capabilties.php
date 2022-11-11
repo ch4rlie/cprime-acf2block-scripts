@@ -2,12 +2,15 @@
 set_time_limit(500);
 require_once('wp-load.php');
 define('WP_USE_THEMES', false);
-
+remove_action('pre_post_update', 'wp_save_post_revision');
+global $wpdb;
 
 $args = array(
     'meta_key' => '_wp_page_template',
     'meta_value' => 'template_capabilities.php',
     'post_status' => ['publish', 'draft'],
+    'hierarchical' => false,
+
 );
 
 $pages = get_pages($args);
@@ -270,6 +273,11 @@ $featThree .= '</div><!-- /wp:group -->';
     endif;
     $cta .= '<!-- /wp:acf/contact-form-full-width -->';
 
+    /**
+     * Manually remove everything from this posts the_content
+     *
+     */
+    $delete_content = $wpdb->update ( 'wp_posts', ['post_content' => ''], ['ID' => $thisPageId] );
 
     $content = $hero.$half.$featThree.$solutions.$quickFacts.$resources.$cta;
     /**
@@ -283,9 +291,8 @@ $featThree .= '</div><!-- /wp:group -->';
 
     /**
      * Check the box to use Gutenberg
-     * TODO: Change that field to a true/false field instead
      */
-    //update_field('use_gutenberg', ['true'], [$thisPageId]);
+    update_field('use_gutenberg', 1, $thisPageId);
 
     if (is_wp_error($update_post)) {
         $errors = $update_post->get_error_messages();
