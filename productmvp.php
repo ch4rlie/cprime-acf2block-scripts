@@ -65,31 +65,42 @@ foreach ($pages as $page) :
     
     $hero .= '<!-- /wp:group -->';
 
+    $open_content = get_field('open_content', $thisPageId);
+    if ($open_content) :
     $info = '<!-- wp:acf/cprime-default-block {"name":"acf/cprime-default-block","data":{"field_636beb1228350":"white","field_636bebb928352":"","field_636beb7d28351":"container"},"mode":"preview"} -->';
-    $info .= '<!-- wp:paragraph -->
-<p>OPEN CONTENT GOES HERE</p>
-<!-- /wp:paragraph -->';
+    $info .= '<!-- wp:paragraph -->'.$open_content.'<!-- /wp:paragraph -->';
     $info .= '<!-- /wp:acf/cprime-default-block -->';
+    endif;
 
+    '.$.'
 
-
+    if (have_rows('three_item', $thisPageId)) :
     $items = '<!-- wp:group {"className":"basic-grey-three-item"} --><div class="wp-block-group basic-grey-three-item">
 <!-- wp:group {"className":"container"} --><div class="wp-block-group container">
 <!-- wp:group {"className":"flexed"} --><div class="wp-block-group flexed">';
-    $items .= '<!-- wp:group {"className":"item"} --><div class="wp-block-group item">
+    while (have_rows('three_item', $thisPageId)) : the_row();
+        $icon = get_sub_field('icon');
+        $title = get_sub_field('title');
+        $text = get_sub_field('text');
+    $items .= '<!-- wp:group {"className":"item"} --><div class="wp-block-group item">';
 
-<!-- wp:heading {"level":4} -->
-<h4>ORGANIZE ISSUES WITH MULTI-LEVEL HIERARCHY</h4>
-<!-- /wp:heading -->
+        $items .= '<!-- wp:heading {"level":4} -->
+<h4>'.$title.'</h4>
+<!-- /wp:heading -->';
 
-<!-- wp:paragraph -->
-<p>From personal backlogs to company-wide, big-picture, portfolio overviews. Arrange issues of any type from any number of projects in hierarchies of any depth.</p>
-<!-- /wp:paragraph --></div>
-<!-- /wp:group -->';
-    $items .= '<!-- /wp:group --></div>
-<!-- /wp:group --></div>
-<!-- /wp:group -->';
-    $items .= '';
+        $items .= '<!-- wp:paragraph -->
+<p>'.$text.'</p>
+<!-- /wp:paragraph -->';
+        $items .= '</div><!-- /wp:group -->';
+
+
+    endwhile;
+    $items .= '</div><!-- /wp:group -->
+</div><!-- /wp:group -->
+</div><!-- /wp:group -->';
+
+
+    endif;
 
 $content = '
 
@@ -130,11 +141,11 @@ https://www.youtube.com/embed/80TPtalUCp8
 <!-- /wp:heading -->
 <!-- /wp:acf/resource-picker -->
 
-<!-- wp:acf/contact-form-full-width {"name":"acf/contact-form-full-width","data":{"marketo_form_id":"4724","_marketo_form_id":"field_636499ebf8c41"},"mode":"preview"} -->
+<!-- wp:acf/contact-form {"name":"acf/contact-form","data":{"marketo_form_id":"4724","_marketo_form_id":"field_636499ebf8c41"},"mode":"preview"} -->
 <!-- wp:heading {"textAlign":"center"} -->
 <h2 class="has-text-align-center">TEST TITLE</h2>
 <!-- /wp:heading -->
-<!-- /wp:acf/contact-form-full-width -->';
+<!-- /wp:acf/contact-form -->';
 
     /**
      * Manually remove everything from this posts the_content
@@ -166,5 +177,13 @@ https://www.youtube.com/embed/80TPtalUCp8
         /**
          * TODO: Delete all data for these acf fields on the page to clear out wp_postmeta
          */
+        delete_field('hero_background', $thisPageId);
+        delete_field('hero_title', $thisPageId);
+        delete_field('hero_sub_title', $thisPageId);
+        delete_field('hero_button_text', $thisPageId);
+        delete_field('hero_button_url', $thisPageId);
+        delete_field('mkto_form_id', $thisPageId);
+        delete_field('open_content', $thisPageId);
+        delete_field('three_item', $thisPageId);
     }
 endforeach;

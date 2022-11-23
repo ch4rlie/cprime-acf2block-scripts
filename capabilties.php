@@ -260,13 +260,13 @@ $featThree .= '</div><!-- /wp:group -->';
         $mkto_form_id = 4431;
     endif;
     $cta_title = get_field('cta_title', $thisPageId);
-    $cta = '<!-- wp:acf/contact-form-full-width {"name":"acf/contact-form-full-width","data":{"marketo_form_id":"'.$mkto_form_id.'","_marketo_form_id":"field_636499ebf8c41"},"mode":"preview"} -->';
+    $cta = '<!-- wp:acf/contact-form {"name":"acf/contact-form","data":{"marketo_form_id":"'.$mkto_form_id.'","_marketo_form_id":"field_636499ebf8c41"},"mode":"preview"} -->';
     if ($cta_title) :
         $cta .= '<!-- wp:heading -->
         <h2>'.$cta_title.'</h2>
         <!-- /wp:heading -->';
     endif;
-    $cta .= '<!-- /wp:acf/contact-form-full-width -->';
+    $cta .= '<!-- /wp:acf/contact-form -->';
 
     /**
      * Manually remove everything from this posts the_content
