@@ -72,7 +72,6 @@ foreach ($pages as $page) :
     $info .= '<!-- /wp:acf/cprime-default-block -->';
     endif;
 
-    '.$.'
 
     if (have_rows('three_item', $thisPageId)) :
     $items = '<!-- wp:group {"className":"basic-grey-three-item"} --><div class="wp-block-group basic-grey-three-item">
@@ -102,50 +101,54 @@ foreach ($pages as $page) :
 
     endif;
 
-$content = '
 
+   $ft_title = get_field('feature_title', $thisPageId);
+   $ft_text = get_field('feature_text', $thisPageId);
+    $ft_image = get_field('feature_image', $thisPageId);
 
+    if ($ft_image || $ft_text || $ft_title) :
+$content .= '<!-- wp:group {"className":"container-beige-section"} --><div class="wp-block-group container-beige-section">
+<!-- wp:group {"className":"container"} --><div class="wp-block-group container">';
+    if ($ft_title) $content .= '<!-- wp:heading {"level":2} --><h2>'.$ft_title.'</h2><!-- /wp:heading -->';
+    if ($ft_text) $content .= '<!-- wp:paragraph --><p>'.$ft_text.'</p><!-- /wp:paragraph -->';
+    if ($ft_image) $content .= '<!-- wp:image {"sizeSlug":"large"} -->
+<figure class="wp-block-image size-large"><img src="'.$ft_image['sizes']['large'].'" alt="'.$ft_image['alt'].'"/></figure>
+<!-- /wp:image -->';
 
+$content .= '</div><!-- /wp:group -->
+</div><!-- /wp:group -->';
 
+endif;
 
+    /**
+     * Resources
+     */
+    $i=0;
+    $content .= '<!-- wp:acf/resource-picker {"name":"acf/resource-picker","data":{';
+    if (have_rows('related_resources', $thisPageId)) : while (have_rows('related_resources', $thisPageId)) : the_row();
+        $resource = get_sub_field('resource');
+        if ($resource) :
+            $content .= '"resources_'.$i.'_resource":'.$resource.',"_resources_'.$i.'_resource":"field_63658c67f6bef",';
+            $i++;
+        endif;
+    endwhile;
+    endif;
+    $content .= '"resources":'.$i.',"_resources":"field_63658adf3a188"},"mode":"preview"} -->';
+    $content .= '<!-- /wp:acf/resource-picker -->';
 
-
-
-
-
-<!-- wp:group {"className":"container-beige-section"} -->
-<div class="wp-block-group container-beige-section"><!-- wp:group {"className":"container"} -->
-<div class="wp-block-group container"><!-- wp:paragraph -->
-<p>Cprime provides Structure training that enables your team to quickly organize Jira issues with flexible hierarchies that map to your way of doing things. Individual or whole-team training is available. Our Structure course focuses on core concepts, administration, best practices, and key Structure features such as automation, transformations, custom views, and more! To learn more about receiving official Structure training from Cprime fill out the form on this page and our team will contact you shortly.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>Reach out to the Cprime Training Team and well set your team on a path to success with Structure for Jira.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:embed {"url":"https://www.youtube.com/embed/80TPtalUCp8","type":"rich","providerNameSlug":"embed-handler","responsive":true,"className":"wp-embed-aspect-16-9 wp-has-aspect-ratio"} -->
-<figure class="wp-block-embed is-type-rich is-provider-embed-handler wp-block-embed-embed-handler wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
-https://www.youtube.com/embed/80TPtalUCp8
-</div></figure>
-<!-- /wp:embed -->
-
-<!-- wp:image {"id":73496,"sizeSlug":"medium","linkDestination":"media"} -->
-<figure class="wp-block-image size-medium"><a href="http://localhost/wp-content/uploads/2022/07/Agile_Team_Facilitator_4.png"><img src="http://localhost/wp-content/uploads/2022/07/Agile_Team_Facilitator_4-300x300.png" alt="" class="wp-image-73496"/></a></figure>
-<!-- /wp:image --></div>
-<!-- /wp:group --></div>
-<!-- /wp:group -->
-
-<!-- wp:acf/resource-picker {"name":"acf/resource-picker","data":{"resources_0_resource":39573,"_resources_0_resource":"field_63658c67f6bef","resources_1_resource":56300,"_resources_1_resource":"field_63658c67f6bef","resources_2_resource":56325,"_resources_2_resource":"field_63658c67f6bef","resources":3,"_resources":"field_63658adf3a188"},"mode":"preview"} -->
-<!-- wp:heading -->
-<h2>Related Resources<a href="http://localhost/resource/infographics/be-a-better-programmer/"></a></h2>
-<!-- /wp:heading -->
-<!-- /wp:acf/resource-picker -->
-
-<!-- wp:acf/contact-form {"name":"acf/contact-form","data":{"marketo_form_id":"4724","_marketo_form_id":"field_636499ebf8c41"},"mode":"preview"} -->
-<!-- wp:heading {"textAlign":"center"} -->
-<h2 class="has-text-align-center">TEST TITLE</h2>
-<!-- /wp:heading -->
-<!-- /wp:acf/contact-form -->';
+    /**
+     * CTA
+     */
+    $mkto_form_id = get_field('mkto_form_id', $thisPageId);
+    if (empty($mkto_form_id)) :
+        $mkto_form_id = 4431;
+    endif;
+    $cta_title = get_field('form_title', $thisPageId);
+    $content .= '<!-- wp:acf/contact-form {"name":"acf/contact-form","data":{"marketo_form_id":"'.$mkto_form_id.'","_marketo_form_id":"field_636499ebf8c41"},"mode":"preview"} -->';
+    if ($cta_title) :
+        $content .= get_field('pre_form_content)');
+    endif;
+    $content .= '<!-- /wp:acf/contact-form -->';
 
     /**
      * Manually remove everything from this posts the_content
@@ -185,5 +188,12 @@ https://www.youtube.com/embed/80TPtalUCp8
         delete_field('mkto_form_id', $thisPageId);
         delete_field('open_content', $thisPageId);
         delete_field('three_item', $thisPageId);
+        delete_field('feature_title', $thisPageId);
+        delete_field('feature_text', $thisPageId);
+        delete_field('feature_image', $thisPageId);
+        delete_field('related_resources', $thisPageId);
+        delete_field('pre_form_content', $thisPageId);
+        delete_field('form_title', $thisPageId);
+        delete_field('mkto_form_id', $thisPageId);
     }
 endforeach;
