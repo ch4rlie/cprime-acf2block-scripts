@@ -298,36 +298,7 @@ foreach ($pages as $page) :
          );
          $update_post = wp_update_post($data, true, false);
 
-         /**
-          * Delete ACF Post Data
-          */
-          delete_field( 'logo_max_height', $thisPageId );
-          delete_field( 'hero_product_logo', $thisPageId );
-          delete_field( 'main_hero_image', $thisPageId );
-          delete_field( 'hero_title', $thisPageId );
-          delete_field( 'hero_sub_title', $thisPageId );
-          delete_field( 'cta_button', $thisPageId );
-          delete_field( 'cta_link_override', $thisPageId );
-          delete_field( 'intro_image', $thisPageId );
-          delete_field( 'intro_video', $thisPageId );
-          delete_field( 'intro_title', $thisPageId );
-          delete_field( 'intro_sub_title', $thisPageId );
-          delete_field( 'intro_three_columns', $thisPageId );
-          delete_field( 'solutions_title', $thisPageId );
-          delete_field( 'solutions_sub_title', $thisPageId );
-          delete_field( 'solutions_fixed_image', $thisPageId );
-          delete_field( 'solutions_items', $thisPageId );
-          delete_field( 'quick_facts_title', $thisPageId );
-          delete_field( 'quick_facts_desc', $thisPageId );
-          delete_field( 'quick_facts_items', $thisPageId );
-          delete_field( 'resources_title', $thisPageId );
-          delete_field( 'featured_resource', $thisPageId );
-          delete_field( 'featured_resource_snippet', $thisPageId );
-          delete_field( 'featured_resource_link_text', $thisPageId );
-          delete_field( 'three_resources', $thisPageId );
-          delete_field( 'cta_title', $thisPageId );
-          delete_field( 'cta_form_url', $thisPageId );
-          delete_field( 'mkto_form_id', $thisPageId );
+
          
 
          /**
@@ -350,9 +321,41 @@ foreach ($pages as $page) :
          else {
              echo "Success on " . $thisPageId;
              echo "<br />";
-             /**
-              * TODO: Delete all data for these acf fields on the page to clear out wp_postmeta
-              */
+
+             
+              /**
+               * Delete ACF Post Data
+               */
+               delete_field( 'logo_max_height', $thisPageId );
+               delete_field( 'hero_product_logo', $thisPageId );
+               delete_field( 'main_hero_image', $thisPageId );
+               delete_field( 'hero_title', $thisPageId );
+               delete_field( 'hero_sub_title', $thisPageId );
+               delete_field( 'cta_button', $thisPageId );
+               delete_field( 'cta_link_override', $thisPageId );
+               delete_field( 'intro_image', $thisPageId );
+               delete_field( 'intro_video', $thisPageId );
+               delete_field( 'intro_title', $thisPageId );
+               delete_field( 'intro_sub_title', $thisPageId );
+               delete_field( 'intro_three_columns', $thisPageId );
+               delete_field( 'solutions_title', $thisPageId );
+               delete_field( 'solutions_sub_title', $thisPageId );
+               delete_field( 'solutions_fixed_image', $thisPageId );
+               delete_field( 'solutions_items', $thisPageId );
+               delete_field( 'quick_facts_title', $thisPageId );
+               delete_field( 'quick_facts_desc', $thisPageId );
+               delete_field( 'quick_facts_items', $thisPageId );
+               delete_field( 'resources_title', $thisPageId );
+               delete_field( 'featured_resource', $thisPageId );
+               delete_field( 'featured_resource_snippet', $thisPageId );
+               delete_field( 'featured_resource_link_text', $thisPageId );
+               delete_field( 'three_resources', $thisPageId );
+               delete_field( 'cta_title', $thisPageId );
+               delete_field( 'cta_form_url', $thisPageId );
+               delete_field( 'mkto_form_id', $thisPageId );
+
+
+
          }
      } //End of gutenberg check
 
